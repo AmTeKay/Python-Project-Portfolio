@@ -1,0 +1,153 @@
+############### Code Start - Expert LVL :P #####################
+
+import random
+from art import logo
+from replit import clear
+cards = [11, 2, 3, 4, 5, 6, 7, 8, 9, 10, 10, 10, 10]
+
+### For user , over 21 with Ace , Ace = 1
+def user_over_ace(user):
+	if 11 in user:
+		y = user.index(11)
+		user[y] = 1
+
+### For Computer , over 21 with Ace , Ace = 1
+def computer_over_ace(computer):
+	if 11 in computer:
+		z = computer.index(11)
+		computer[z] = 1
+
+#### Play Again Function
+def play_again():
+	play_again = input("\nDo you want to play again? type 'y' or 'n': ").lower()
+	if play_again == 'n':
+		print("Good Bye!")
+		return False
+	else:
+		clear()
+		return True
+		
+#### Play End
+
+
+#### First Output
+def first_output(user, computer):
+	print(f"	Your cards: {user}, score {sum(user)}")
+	print(f"	Computer card: {computer[0]}\n")
+
+#### Final Output
+def final_output(user, computer):
+	print(f"	Your Final cards: {user}, Final score: {sum(user)}")
+	print(f"	Computer Final cards: {computer}, Final score: {sum(computer)}\n")
+
+
+######################### Game Play Start from here ################################
+######################### Game Play Start from here ################################
+######################### Game Play Start from here ################################
+play = input("Do you want to play Blackjack? type 'y' or 'n': ").lower()
+if play == "y":
+	game = True
+	while game:
+		print(logo)
+		#For User
+		user = []
+		for u in range(2):
+			user.append(random.choice(cards))
+			### Double Ace Check
+			if sum(user) > 21:
+				user_over_ace(user)
+
+		#For Computer
+		computer = []
+		for c in range(2):
+			computer.append(random.choice(cards))
+			### Double Ace Check
+			if sum(computer) > 21:
+				computer_over_ace(computer)
+
+		#Print Frist Output if less than 21
+		first_output(user, computer)												# First Output
+
+		## First start with 21 check
+		if sum(user) == 21:
+			if sum(computer) == 21:
+				final_output(user, computer)										## Final Output
+				print("lose, opponent has blackjack!")
+				#### Play Again !!! ####
+				game = play_again()								### Play Again funcion
+			else:
+				final_output(user, computer)										## Final Output
+				print(f"You win, BLACKJACK!")
+				#### Play Again !!! ####
+				game = play_again()								### Play Again funcion
+		elif sum(computer) == 21:
+			final_output(user, computer)											## Final Output
+			print(f"lose, opponent has BLACKJACK!")
+			#### Play Again !!! ####
+			game = play_again()									### Play Again funcion
+		else:
+			## Second , Draw another cards
+			process = True
+			while process:
+				ask = input("Type 'y' to more card, 'n' to pass: ").lower()
+				print("")
+				if ask == 'y':
+					user.append(random.choice(cards))
+					# numbers["user"] = sum(user)
+					if sum(user) < 21:
+						first_output(user, computer)									## FiRst Output
+					### For "21" With 3 cards
+					elif sum(user) == 21:
+						final_output(user, computer)									## FiNal Output	
+						print("You Win with 21")
+						process = False
+						game = play_again()						### Play Again funcion
+					### Check Over 21
+					if sum(user) > 21:
+						### Check Over 21 with Ace
+						if 11 in user:
+							y = user.index(11)
+							user[y] = 1
+							first_output(user, computer)								## FiRst Output
+						### Over 21, Game over
+						else:
+							final_output(user, computer)								## FiNal Output
+							print("lose, You went over!")
+							process = False
+							game = play_again()					### Play Again funcion
+				else:
+					## Second, Computer Draw Another cards
+					process = False
+					while not sum(computer) > 16:
+						computer.append(random.choice(cards))
+						if sum(computer) > 21:
+							computer_over_ace(computer)
+					### Check Over 21
+					if sum(computer) > 21:
+						final_output(user, computer)									## FiNal Output
+						print("You win, opponent went over")
+						game = play_again()						### Play Again funcion
+					### For "21" with 3 cards
+					elif sum(computer) == 21:
+						final_output(user, computer)									## FiNal Output	
+						print("lose, opponent has 21!")
+						game = play_again()						### Play Again funcion					
+					#### Finally Block 7 , Win or Lose
+					else:
+						### Print Out Final Scores
+						final_output(user, computer)									## FiNal Output
+						us = sum(user)
+						cs = sum(computer)
+						### Win or Lose
+						if us > cs:
+							print("You Win!")
+						elif cs > us:
+							print("You Lose!")
+						elif us == cs:
+							print("Draw")
+						
+						#### Play Again !!!
+						game = play_again()
+					
+else:
+	print("Good Bye")
